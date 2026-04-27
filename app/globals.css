@@ -14,6 +14,11 @@ html {
   scroll-behavior: smooth;
 }
 
+body.lightbox-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
 body.lightbox-open nav,
 body.lightbox-open header {
   display: none !important;
