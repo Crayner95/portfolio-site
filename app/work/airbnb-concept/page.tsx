@@ -159,11 +159,25 @@ function LightboxImage({
 }
 
 // ── Wireframe Carousel ──────────────────────────────────────────────────────
+function useSwipe(onLeft: () => void, onRight: () => void) {
+  const touchStart = useRef(0);
+  const onTouchStart = (e: React.TouchEvent) => { touchStart.current = e.touches[0].clientX; };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? onLeft() : onRight(); }
+  };
+  return { onTouchStart, onTouchEnd };
+}
+
 const wireframes = ["/lowfid1.png", "/lowfid2.png", "/lowfid3.png", "/lowfid4.png"];
 
 function WireframeCarousel() {
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const swipe = useSwipe(
+    () => setCurrentIndex((i) => (i + 1) % wireframes.length),
+    () => setCurrentIndex((i) => (i - 1 + wireframes.length) % wireframes.length)
+  );
 
   useEffect(() => {
     if (open) {
@@ -222,6 +236,8 @@ function WireframeCarousel() {
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="relative max-w-4xl w-full"
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={swipe.onTouchStart}
+              onTouchEnd={swipe.onTouchEnd}
             >
               <AnimatePresence mode="wait">
                 <motion.img
@@ -238,13 +254,13 @@ function WireframeCarousel() {
 
               <button
                 onClick={() => setCurrentIndex((i) => (i - 1 + wireframes.length) % wireframes.length)}
-                className="absolute left-2 md:left-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors duration-200 z-10"
+                className="hidden md:flex absolute left-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 items-center justify-center text-white transition-colors duration-200 z-10"
               >
                 &larr;
               </button>
               <button
                 onClick={() => setCurrentIndex((i) => (i + 1) % wireframes.length)}
-                className="absolute right-2 md:right-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors duration-200 z-10"
+                className="hidden md:flex absolute right-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 items-center justify-center text-white transition-colors duration-200 z-10"
               >
                 &rarr;
               </button>
@@ -277,6 +293,10 @@ const highFidelity = ["/highfid1.png", "/highfid2.png", "/highfid3.png", "/highf
 function HighFidelityCarousel() {
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const swipe = useSwipe(
+    () => setCurrentIndex((i) => (i + 1) % highFidelity.length),
+    () => setCurrentIndex((i) => (i - 1 + highFidelity.length) % highFidelity.length)
+  );
 
   useEffect(() => {
     if (open) {
@@ -335,6 +355,8 @@ function HighFidelityCarousel() {
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="relative max-w-4xl w-full"
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={swipe.onTouchStart}
+              onTouchEnd={swipe.onTouchEnd}
             >
               <AnimatePresence mode="wait">
                 <motion.img
@@ -351,13 +373,13 @@ function HighFidelityCarousel() {
 
               <button
                 onClick={() => setCurrentIndex((i) => (i - 1 + highFidelity.length) % highFidelity.length)}
-                className="absolute left-2 md:left-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors duration-200 z-10"
+                className="hidden md:flex absolute left-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 items-center justify-center text-white transition-colors duration-200 z-10"
               >
                 &larr;
               </button>
               <button
                 onClick={() => setCurrentIndex((i) => (i + 1) % highFidelity.length)}
-                className="absolute right-2 md:right-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors duration-200 z-10"
+                className="hidden md:flex absolute right-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 items-center justify-center text-white transition-colors duration-200 z-10"
               >
                 &rarr;
               </button>
