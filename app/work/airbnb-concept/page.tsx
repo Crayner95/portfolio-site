@@ -413,7 +413,7 @@ export default function AirbnbConcept() {
     <div className="min-h-screen bg-[#FAFAFA]">
       {/* ── Hero ── */}
       <section
-        className="h-screen min-h-[600px] flex flex-col items-center justify-center relative overflow-hidden"
+        className="h-dvh min-h-[400px] flex flex-col items-center justify-center relative overflow-hidden"
         style={{ backgroundColor: "#FAFAFA" }}
       >
         <motion.span

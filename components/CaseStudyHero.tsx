@@ -29,7 +29,7 @@ export default function CaseStudyHero({
 
   return (
     <section
-      className={`relative flex flex-col overflow-hidden ${hasImages ? "h-screen min-h-[600px] max-h-[1200px]" : "h-screen min-h-[600px] justify-center"}`}
+      className={`relative flex flex-col overflow-hidden ${hasImages ? "h-screen min-h-[500px] max-h-[1200px]" : "h-dvh min-h-[400px] justify-center"}`}
       style={{ backgroundColor: bgColor }}
     >
       {/* ── Text content ── */}
