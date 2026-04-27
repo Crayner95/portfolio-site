@@ -33,26 +33,31 @@ export default function CaseStudySidebar({
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
 
-    sidebarSections.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return;
+    // Small delay to ensure DOM elements are rendered
+    const timeout = setTimeout(() => {
+      sidebarSections.forEach(({ id }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
 
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(id);
-          }
-        },
-        { rootMargin: "-20% 0px -70% 0px", threshold: 0 }
-      );
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              setActiveSection(id);
+            }
+          },
+          { rootMargin: "-20% 0px -70% 0px", threshold: 0 }
+        );
 
-      observer.observe(el);
-      observers.push(observer);
-    });
+        observer.observe(el);
+        observers.push(observer);
+      });
+    }, 300);
 
-    return () => observers.forEach((o) => o.disconnect());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {
+      clearTimeout(timeout);
+      observers.forEach((o) => o.disconnect());
+    };
+  }, [sidebarSections]);
 
   const handleClick = (id: string) => {
     const el = document.getElementById(id);
