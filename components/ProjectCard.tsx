@@ -44,14 +44,14 @@ export default function ProjectCard({
           }}
         >
           {/* ── Text: top-left, constrained to ~55% width ── */}
-          <div className="relative z-10 max-w-[70%]">
-            <h3 className="font-cormorant text-4xl font-semibold text-charcoal mb-3 leading-tight">
+          <div className="relative z-10 max-w-full md:max-w-[70%]">
+            <h3 className="font-cormorant text-2xl md:text-4xl font-semibold text-charcoal mb-2 md:mb-3 leading-tight">
               {title}
             </h3>
-            <p className="font-mono text-sm text-charcoal/50 leading-relaxed mb-6">
+            <p className="font-mono text-xs md:text-sm text-charcoal/50 leading-relaxed mb-4 md:mb-6">
               {description}
             </p>
-            <span className="inline-flex items-center gap-1.5 font-mono text-sm text-charcoal/70 group-hover:text-charcoal tracking-wide transition-colors duration-300">
+            <span className="inline-flex items-center gap-1.5 font-mono text-xs md:text-sm text-charcoal/70 group-hover:text-charcoal tracking-wide transition-colors duration-300">
               View Case Study
               <motion.span
                 className="inline-block group-hover:translate-x-1 transition-transform duration-300"
