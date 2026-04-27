@@ -2,19 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const navLinks = [
   { href: "/#work", label: "Work" },
   { href: "/sketchbook", label: "Sketchbook" },
-  { href: "/about", label: "About" },
+  { href: "/about", label: "About Me" },
   { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -96,8 +107,8 @@ export default function Navbar() {
           Celine Rayner
         </Link>
 
-        {/* Nav Links */}
-        <ul className="flex items-center gap-4 md:gap-8">
+        {/* Desktop Nav Links */}
+        <ul className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive =
               link.href === "/about"
@@ -127,7 +138,61 @@ export default function Navbar() {
             );
           })}
         </ul>
+
+        {/* Mobile Hamburger */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-[5px] z-[60]"
+          aria-label="Toggle menu"
+        >
+          <span className={`block w-5 h-[1.5px] bg-charcoal transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[6.5px]" : ""}`} />
+          <span className={`block w-5 h-[1.5px] bg-charcoal transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+          <span className={`block w-5 h-[1.5px] bg-charcoal transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[6.5px]" : ""}`} />
+        </button>
       </nav>
+
+      {/* Mobile Fullscreen Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center gap-8 md:hidden"
+          >
+            {navLinks.map((link, i) => {
+              const isActive =
+                link.href === "/about"
+                  ? pathname === "/about"
+                  : link.href === "/contact"
+                  ? pathname === "/contact"
+                  : link.href === "/sketchbook"
+                  ? pathname === "/sketchbook"
+                  : false;
+
+              return (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.08 }}
+                >
+                  <Link
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`font-cormorant text-3xl font-semibold transition-colors duration-300 ${
+                      isActive ? "text-gold" : "text-charcoal hover:text-gold"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }
