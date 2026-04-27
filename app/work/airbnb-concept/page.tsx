@@ -65,18 +65,17 @@ function LightboxImage({
       const scrollY = window.scrollY;
       document.body.style.setProperty("--scroll-y", `-${scrollY}px`);
       document.body.classList.add("lightbox-open");
-    } else {
-      const scrollY = document.body.style.getPropertyValue("--scroll-y");
-      document.body.classList.remove("lightbox-open");
-      document.body.style.removeProperty("--scroll-y");
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      const prevent = (e: TouchEvent) => { e.preventDefault(); };
+      document.addEventListener("touchmove", prevent, { passive: false });
+      return () => {
+        document.removeEventListener("touchmove", prevent);
+        const sy = document.body.style.getPropertyValue("--scroll-y");
+        document.body.classList.remove("lightbox-open");
+        document.body.style.removeProperty("--scroll-y");
+        window.scrollTo(0, parseInt(sy || "0") * -1);
+      };
     }
-    return () => {
-      const scrollY = document.body.style.getPropertyValue("--scroll-y");
-      document.body.classList.remove("lightbox-open");
-      document.body.style.removeProperty("--scroll-y");
-      if (scrollY) window.scrollTo(0, parseInt(scrollY) * -1);
-    };
+    return undefined;
   }, [open]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -194,18 +193,17 @@ function WireframeCarousel() {
       const scrollY = window.scrollY;
       document.body.style.setProperty("--scroll-y", `-${scrollY}px`);
       document.body.classList.add("lightbox-open");
-    } else {
-      const scrollY = document.body.style.getPropertyValue("--scroll-y");
-      document.body.classList.remove("lightbox-open");
-      document.body.style.removeProperty("--scroll-y");
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      const prevent = (e: TouchEvent) => { e.preventDefault(); };
+      document.addEventListener("touchmove", prevent, { passive: false });
+      return () => {
+        document.removeEventListener("touchmove", prevent);
+        const sy = document.body.style.getPropertyValue("--scroll-y");
+        document.body.classList.remove("lightbox-open");
+        document.body.style.removeProperty("--scroll-y");
+        window.scrollTo(0, parseInt(sy || "0") * -1);
+      };
     }
-    return () => {
-      const scrollY = document.body.style.getPropertyValue("--scroll-y");
-      document.body.classList.remove("lightbox-open");
-      document.body.style.removeProperty("--scroll-y");
-      if (scrollY) window.scrollTo(0, parseInt(scrollY) * -1);
-    };
+    return undefined;
   }, [open]);
 
   useEffect(() => {
@@ -323,18 +321,17 @@ function HighFidelityCarousel() {
       const scrollY = window.scrollY;
       document.body.style.setProperty("--scroll-y", `-${scrollY}px`);
       document.body.classList.add("lightbox-open");
-    } else {
-      const scrollY = document.body.style.getPropertyValue("--scroll-y");
-      document.body.classList.remove("lightbox-open");
-      document.body.style.removeProperty("--scroll-y");
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      const prevent = (e: TouchEvent) => { e.preventDefault(); };
+      document.addEventListener("touchmove", prevent, { passive: false });
+      return () => {
+        document.removeEventListener("touchmove", prevent);
+        const sy = document.body.style.getPropertyValue("--scroll-y");
+        document.body.classList.remove("lightbox-open");
+        document.body.style.removeProperty("--scroll-y");
+        window.scrollTo(0, parseInt(sy || "0") * -1);
+      };
     }
-    return () => {
-      const scrollY = document.body.style.getPropertyValue("--scroll-y");
-      document.body.classList.remove("lightbox-open");
-      document.body.style.removeProperty("--scroll-y");
-      if (scrollY) window.scrollTo(0, parseInt(scrollY) * -1);
-    };
+    return undefined;
   }, [open]);
 
   useEffect(() => {

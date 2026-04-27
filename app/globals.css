@@ -18,8 +18,11 @@ body.lightbox-open {
   overflow: hidden !important;
   position: fixed;
   width: 100%;
+  height: 100%;
   top: var(--scroll-y, 0);
   touch-action: none;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
 }
 
 body.lightbox-open nav,
