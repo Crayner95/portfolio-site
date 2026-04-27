@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import CaseStudyHero from "@/components/CaseStudyHero";
 import CaseStudySidebar from "@/components/CaseStudySidebar";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
 import FadeUp from "@/components/FadeUp";
 
 const airbnbSections = [

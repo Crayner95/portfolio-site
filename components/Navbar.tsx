@@ -32,7 +32,7 @@ export default function Navbar() {
 
     const findAndAttachOverlay = () => {
       // Check all direct children that could be the overlay
-      const candidates = document.querySelectorAll("div[style]");
+      const candidates = Array.from(document.querySelectorAll("div[style]"));
       for (const el of candidates) {
         const computed = window.getComputedStyle(el);
         if (

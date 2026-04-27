@@ -160,7 +160,8 @@ function DeviceMockups({ mockups }: { mockups: DeviceMockup[] }) {
   );
 }
 
-/* ── Placeholder mockups (no real images yet) ───────────────────────────────── */
+/* ── Placeholder mockups (kept for future use) ──────────────────────────────── */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function DeviceMockupPlaceholders() {
   return (
     <div className="relative w-full max-w-4xl h-full min-h-[280px]">

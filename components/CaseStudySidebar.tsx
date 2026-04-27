@@ -51,6 +51,7 @@ export default function CaseStudySidebar({
     });
 
     return () => observers.forEach((o) => o.disconnect());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClick = (id: string) => {
