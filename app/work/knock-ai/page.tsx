@@ -219,11 +219,21 @@ function LightboxImage({
 
   useEffect(() => {
     if (open) {
+      const scrollY = window.scrollY;
+      document.body.style.setProperty("--scroll-y", `-${scrollY}px`);
       document.body.classList.add("lightbox-open");
     } else {
+      const scrollY = document.body.style.getPropertyValue("--scroll-y");
       document.body.classList.remove("lightbox-open");
+      document.body.style.removeProperty("--scroll-y");
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
-    return () => document.body.classList.remove("lightbox-open");
+    return () => {
+      const scrollY = document.body.style.getPropertyValue("--scroll-y");
+      document.body.classList.remove("lightbox-open");
+      document.body.style.removeProperty("--scroll-y");
+      if (scrollY) window.scrollTo(0, parseInt(scrollY) * -1);
+    };
   }, [open]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -346,11 +356,21 @@ function StackedCarouselCard({
 
   useEffect(() => {
     if (open) {
+      const scrollY = window.scrollY;
+      document.body.style.setProperty("--scroll-y", `-${scrollY}px`);
       document.body.classList.add("lightbox-open");
     } else {
+      const scrollY = document.body.style.getPropertyValue("--scroll-y");
       document.body.classList.remove("lightbox-open");
+      document.body.style.removeProperty("--scroll-y");
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
-    return () => document.body.classList.remove("lightbox-open");
+    return () => {
+      const scrollY = document.body.style.getPropertyValue("--scroll-y");
+      document.body.classList.remove("lightbox-open");
+      document.body.style.removeProperty("--scroll-y");
+      if (scrollY) window.scrollTo(0, parseInt(scrollY) * -1);
+    };
   }, [open]);
 
   useEffect(() => {
