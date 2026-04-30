@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import FadeUp from "@/components/FadeUp";
 
-const rotatingLines = [
-  "I am a product designer.",
-  "I used to be a fullstack developer.",
-  "I have been crafting designs for B2B & B2C since 2023.",
-  "I am currently a designer at a cybersecurity company.",
-];
+const highlights: Record<string, string> = {
+  "Celine Rayner": "That's me — nice to meet you.",
+  "curiosity": "I ask why before I ask how.",
+  "versatility": "From fullstack code to high-fidelity design.",
+  "dynamic environments": "Startups, fast cycles, ambiguity — I thrive in it.",
+};
 
 const projects = [
   {
@@ -32,15 +32,73 @@ const projects = [
   },
 ];
 
-export default function Home() {
-  const [lineIndex, setLineIndex] = useState(0);
+function HeroText({ hovered, setHovered }: { hovered: string | null; setHovered: (v: string | null) => void }) {
+  const dimmed = hovered !== null;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLineIndex((prev) => (prev + 1) % rotatingLines.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
+  const Span = ({ children }: { children: string }) => {
+    const isHighlight = children in highlights;
+    const isActive = hovered === children;
+
+    if (!isHighlight) {
+      return (
+        <span
+          className="transition-opacity duration-300"
+          style={{ opacity: dimmed ? 0.15 : 1 }}
+        >
+          {children}
+        </span>
+      );
+    }
+
+    return (
+      <span className="relative inline">
+        <span
+          className="cursor-pointer transition-all duration-300"
+          style={{
+            opacity: dimmed && !isActive ? 0.15 : 1,
+            color: isActive ? "#9AA0F0" : undefined,
+          }}
+          onMouseEnter={() => setHovered(children)}
+          onMouseLeave={() => setHovered(null)}
+        >
+          {children}
+        </span>
+        {isActive && (
+          <motion.span
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute left-0 top-full mt-2 font-mono text-[11px] text-gold whitespace-nowrap z-10"
+          >
+            {highlights[children]}
+          </motion.span>
+        )}
+      </span>
+    );
+  };
+
+  return (
+    <motion.h1
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className="font-cormorant text-[36px] md:text-[52px] lg:text-[60px] font-semibold text-charcoal leading-[1.2] md:leading-[1.15] tracking-tight"
+    >
+      <Span>Celine Rayner</Span>
+      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}> is a developer turned designer with the </span>
+      <Span>curiosity</Span>
+      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}> and </span>
+      <Span>versatility</Span>
+      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}> to dive into </span>
+      <Span>dynamic environments</Span>
+      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}>.</span>
+    </motion.h1>
+  );
+}
+
+export default function Home() {
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-white">
@@ -49,30 +107,8 @@ export default function Home() {
         className="min-h-screen flex items-center justify-center px-6 md:px-10"
         style={{ backgroundColor: "#F3F1FA" }}
       >
-        <div className="text-center max-w-3xl">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-mono text-[18px] text-charcoal/40 mb-4"
-          >
-            Welcome! I&apos;m Celine.
-          </motion.p>
-
-          <div className="min-h-[100px] relative">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={lineIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="font-cormorant text-[28px] md:text-[32px] font-semibold text-charcoal leading-snug"
-              >
-                {rotatingLines[lineIndex]}
-              </motion.p>
-            </AnimatePresence>
-          </div>
+        <div className="max-w-4xl">
+          <HeroText hovered={hovered} setHovered={setHovered} />
         </div>
       </section>
       {/* Work / Projects Section */}
