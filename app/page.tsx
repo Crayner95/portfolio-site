@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
 import FadeUp from "@/components/FadeUp";
 
-const highlights: Record<string, string> = {
-  "Celine Rayner": "That's me — nice to meet you.",
-  "curiosity": "I ask why before I ask how.",
-  "versatility": "From fullstack code to high-fidelity design.",
-  "dynamic environments": "Startups, fast cycles, ambiguity — I thrive in it.",
+const highlights: Record<string, { caption: string; color: string }> = {
+  "Celine Rayner": { caption: "That's me — nice to meet you.", color: "#1C1C1C" },
+  "curiosity": { caption: "I ask why before I ask how.", color: "#6D5ACF" },
+  "versatility": { caption: "From fullstack code to high-fidelity design.", color: "#CF5A8F" },
+  "dynamic environments": { caption: "Startups, fast cycles, ambiguity — I thrive in it.", color: "#3A8F7A" },
 };
 
 const projects = [
@@ -35,65 +35,68 @@ const projects = [
 function HeroText({ hovered, setHovered }: { hovered: string | null; setHovered: (v: string | null) => void }) {
   const dimmed = hovered !== null;
 
-  const Span = ({ children }: { children: string }) => {
-    const isHighlight = children in highlights;
-    const isActive = hovered === children;
+  const Plain = ({ children }: { children: string }) => (
+    <span
+      className="transition-opacity duration-300"
+      style={{ opacity: dimmed ? 0.15 : 1 }}
+    >
+      {children}
+    </span>
+  );
 
-    if (!isHighlight) {
-      return (
-        <span
-          className="transition-opacity duration-300"
-          style={{ opacity: dimmed ? 0.15 : 1 }}
-        >
-          {children}
-        </span>
-      );
-    }
+  const Highlight = ({ word, italic = false }: { word: string; italic?: boolean }) => {
+    const isActive = hovered === word;
+    const { color } = highlights[word];
 
     return (
-      <span className="relative inline">
-        <span
-          className="cursor-pointer transition-all duration-300"
-          style={{
-            opacity: dimmed && !isActive ? 0.15 : 1,
-            color: isActive ? "#9AA0F0" : undefined,
-          }}
-          onMouseEnter={() => setHovered(children)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          {children}
-        </span>
-        {isActive && (
-          <motion.span
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full mt-2 font-mono text-[11px] text-gold whitespace-nowrap z-10"
-          >
-            {highlights[children]}
-          </motion.span>
-        )}
+      <span
+        className={`cursor-pointer transition-all duration-300 ${italic ? "font-sans italic" : ""}`}
+        style={{
+          opacity: dimmed && !isActive ? 0.15 : 1,
+          color: isActive ? color : undefined,
+        }}
+        onMouseEnter={() => setHovered(word)}
+        onMouseLeave={() => setHovered(null)}
+      >
+        {word}
       </span>
     );
   };
 
   return (
-    <motion.h1
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="font-cormorant text-[36px] md:text-[52px] lg:text-[60px] font-semibold text-charcoal leading-[1.2] md:leading-[1.15] tracking-tight"
-    >
-      <Span>Celine Rayner</Span>
-      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}> is a developer turned designer with the </span>
-      <Span>curiosity</Span>
-      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}> and </span>
-      <Span>versatility</Span>
-      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}> to dive into </span>
-      <Span>dynamic environments</Span>
-      <span className="transition-opacity duration-300" style={{ opacity: dimmed ? 0.15 : 1 }}>.</span>
-    </motion.h1>
+    <div className="relative">
+      <motion.h1
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="font-cormorant text-[36px] md:text-[52px] lg:text-[60px] font-semibold text-charcoal leading-[1.2] md:leading-[1.15] tracking-tight"
+      >
+        <Highlight word="Celine Rayner" />
+        <Plain>{" is a developer turned designer with the "}</Plain>
+        <Highlight word="curiosity" italic />
+        <Plain>{" and "}</Plain>
+        <Highlight word="versatility" italic />
+        <Plain>{" to dive into "}</Plain>
+        <Highlight word="dynamic environments" italic />
+        <Plain>.</Plain>
+      </motion.h1>
+
+      {/* Fixed caption — bottom right */}
+      <div className="h-6 mt-6 flex justify-end">
+        {hovered && (
+          <motion.p
+            key={hovered}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="font-mono text-[12px] md:text-[13px]"
+            style={{ color: highlights[hovered].color }}
+          >
+            {highlights[hovered].caption}
+          </motion.p>
+        )}
+      </div>
+    </div>
   );
 }
 
