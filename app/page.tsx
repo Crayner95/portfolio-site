@@ -6,26 +6,26 @@ import ProjectCard from "@/components/ProjectCard";
 import FadeUp from "@/components/FadeUp";
 
 const highlights: Record<string, { caption: string; color: string }> = {
-  "Celine Rayner": { caption: "That's me — nice to meet you.", color: "#1C1C1C" },
-  "curiosity": { caption: "I ask why before I ask how.", color: "#6D5ACF" },
-  "versatility": { caption: "From fullstack code to high-fidelity design.", color: "#CF5A8F" },
-  "dynamic environments": { caption: "Startups, fast cycles, ambiguity — I thrive in it.", color: "#3A8F7A" },
+  "Celine Rayner": { caption: "That's me :) - nice to meet you.", color: "#1C1C1C" },
+  "curiosity": { caption: "I question the brief, but then also question my own answer 👀", color: "#6D5ACF" },
+  "versatility": { caption: "From fullstack developer to high-fidelity designer 👩🏼‍💻", color: "#CF5A8F" },
+  "dynamic environments": { caption: "I enjoy environments where I can work cross-functionally with teams, and wear many hats ✨", color: "#3A8F7A" },
 };
 
 const projects = [
   {
     title: "Knock AI",
     description:
-      "Turning a dead-end into a launchpad - boosting 84% link activation.",
-    tags: ["UI Design", "Interaction Design", "B2B SaaS"],
+      "Dead end → 84% activity boost",
+    tags: ["B2B SaaS", "UX Research", "UI"],
     href: "/work/knock-ai",
     bgColor: "#F9EDE8",
     coverImage: "/dashboard.png",
   },
   {
     title: "Airbnb Concept",
-    description: "How a personal frustration became a full UX audit and redesign concept.",
-    tags: ["UX Research", "Prototyping"],
+    description: "Personal frustration 🤝 UX audit",
+    tags: ["AI", "Synthetic Research"],
     href: "/work/airbnb-concept",
     bgColor: "#EDF0EC",
     coverImage: "/Airbnb_1.png",
@@ -50,10 +50,11 @@ function HeroText({ hovered, setHovered }: { hovered: string | null; setHovered:
 
     return (
       <span
-        className={`cursor-pointer transition-all duration-300 ${italic ? "font-sans italic" : ""}`}
+        className={`cursor-pointer transition-all duration-300 ${italic ? "italic" : ""}`}
         style={{
+          ...(italic ? { fontFamily: "var(--font-lora)" } : {}),
           opacity: dimmed && !isActive ? 0.15 : 1,
-          color: isActive ? color : undefined,
+          color: color,
         }}
         onMouseEnter={() => setHovered(word)}
         onMouseLeave={() => setHovered(null)}
@@ -69,9 +70,10 @@ function HeroText({ hovered, setHovered }: { hovered: string | null; setHovered:
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="font-cormorant text-[36px] md:text-[52px] lg:text-[60px] font-semibold text-charcoal leading-[1.2] md:leading-[1.15] tracking-tight"
+        className="text-[36px] md:text-[52px] lg:text-[60px] font-semibold text-charcoal leading-[1.2] md:leading-[1.15] tracking-tight"
+        style={{ fontFamily: "var(--font-lora)" }}
       >
-        <Highlight word="Celine Rayner" />
+        <Highlight word="Celine Rayner" /><sup className="text-[#C4960C] text-[28px] md:text-[36px] ml-[-2px]" style={{ verticalAlign: "super", lineHeight: 0 }} aria-hidden="true">&#x273B;</sup>
         <Plain>{" is a developer turned designer with the "}</Plain>
         <Highlight word="curiosity" italic />
         <Plain>{" and "}</Plain>
@@ -89,7 +91,7 @@ function HeroText({ hovered, setHovered }: { hovered: string | null; setHovered:
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className="font-mono text-[12px] md:text-[13px]"
+            className="font-mono text-[16px]"
             style={{ color: highlights[hovered].color }}
           >
             {highlights[hovered].caption}
@@ -151,7 +153,7 @@ export default function Home() {
                 <p className="font-mono text-sm text-charcoal/40 leading-[1.8]">
                   Won Best Mobile App as part of a dev team during my fullstack development days, before transitioning into design. The experience shaped how I approach product thinking — understanding technical constraints, shipping under pressure, and collaborating across disciplines.
                 </p>
-                <span className="inline-block font-mono text-[11px] text-charcoal/30 mt-3 group-hover:text-gold transition-colors duration-300">
+                <span className="inline-block font-mono text-[11px] text-charcoal/60 mt-3 group-hover:text-gold transition-colors duration-300">
                   View on Devpost &#x2197;
                 </span>
               </div>

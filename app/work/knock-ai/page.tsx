@@ -7,10 +7,12 @@ import CaseStudyHero from "@/components/CaseStudyHero";
 import CaseStudySidebar from "@/components/CaseStudySidebar";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import FadeUp from "@/components/FadeUp";
+import { TrendingUp } from "lucide-react";
 
 // ── Decorative Doodle SVGs ────────────────────────────────────────────────────
 const doodleColor = "#E0E5FF";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function DoodleSparkle({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -195,7 +197,7 @@ function SectionLabel({ number, label }: { number: string; label: string }) {
     <div className="flex items-center gap-3 mb-5">
       <span className="font-mono text-[12px] text-gold tracking-widest">{number}</span>
       <div className="h-px w-8 bg-gold/30" />
-      <span className="font-mono text-[12px] text-charcoal/50 tracking-widest uppercase">
+      <span className="font-mono text-[12px] text-charcoal/60 tracking-widest uppercase">
         {label}
       </span>
     </div>
@@ -399,15 +401,24 @@ function StackedCarouselCard({
           />
           {/* Top layer — the visible image */}
           <div className="relative rounded-[8px] overflow-hidden bg-[#F8F7F4] aspect-[4/3] shadow-[0_2px_8px_rgba(0,0,0,0.06)] group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] transition-shadow duration-300">
-            <ImagePlaceholder label={title} aspectRatio="aspect-[4/3]" className="w-full h-full" />
+            {images[0] ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={images[0]}
+                alt={`${title} — thumbnail`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <ImagePlaceholder label={title} aspectRatio="aspect-[4/3]" className="w-full h-full" />
+            )}
           </div>
           {/* Badge showing count */}
           <div className="absolute top-2 right-0 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 shadow-sm border border-charcoal/[0.06]">
-            <span className="font-mono text-[10px] text-charcoal/50">{images.length} screens</span>
+            <span className="font-mono text-[10px] text-charcoal/60">{images.length} screens</span>
           </div>
         </div>
         <h4 className="font-mono text-[13px] font-bold text-charcoal mb-1 group-hover:text-gold transition-colors duration-300">{title}</h4>
-        <p className="font-mono text-sm text-charcoal/40 leading-relaxed">{description}</p>
+        <p className="font-mono text-sm text-charcoal/60 leading-relaxed">{description}</p>
       </div>
 
       {/* Carousel lightbox */}
@@ -524,17 +535,21 @@ export default function KnockAI() {
       <div className="border-t border-b border-charcoal/[0.06] py-10 md:py-12">
         <div className="max-w-3xl mx-auto px-6 md:px-10">
           <FadeUp>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-6 md:gap-2">
               {[
-                { label: "Timeline", value: "Dec 2024 — Early 2025" },
                 { label: "Platform", value: "Web App" },
                 { label: "My Role", value: "UI/UX Designer" },
-              ].map(({ label, value }) => (
-                <div key={label}>
-                  <p className="font-mono text-[10px] text-charcoal/30 tracking-[0.15em] uppercase mb-3">
+                { label: "Collaborated with", value: "PM — Stav" },
+                { label: "Impact", value: "31% in performance", isImpact: true },
+              ].map(({ label, value, isImpact }: { label: string; value: string; isImpact?: boolean }) => (
+                <div key={label} className="min-w-0">
+                  <p className="font-mono text-[10px] text-charcoal/60 tracking-[0.15em] uppercase mb-3 whitespace-nowrap">
                     {label}
                   </p>
-                  <p className="text-[15px] text-charcoal/80 leading-snug">
+                  <p className="text-[14px] text-charcoal/80 leading-snug inline-flex items-center gap-1.5 whitespace-nowrap">
+                    {isImpact && (
+                      <TrendingUp size={14} className="text-green-600 flex-shrink-0" />
+                    )}
                     {value}
                   </p>
                 </div>
@@ -557,7 +572,7 @@ export default function KnockAI() {
                   <DoodleSparkleCluster className="-right-16 -top-2" animate />
                   <SectionLabel number="01" label="The Product" />
                 </div>
-                <h2 ref={introHeadingRef} className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
+                <h2 ref={introHeadingRef} className="text-4xl md:text-5xl font-semibold text-charcoal mb-6" style={{ fontFamily: "var(--font-lora)" }}>
                   Overview
                 </h2>
                 <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
@@ -587,14 +602,14 @@ export default function KnockAI() {
                   <div className="rounded-[8px] bg-[#F8F7F4] px-6 py-6 relative overflow-hidden">
                     <span className="absolute top-4 right-4 text-2xl">&#x1F3AF;</span>
                     <p className="font-mono text-[13px] font-bold text-charcoal mb-2">Experienced SDRs</p>
-                    <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
+                    <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
                       Know exactly which routing rule to use. Just want to create the link and go. Extra steps slow them down.
                     </p>
                   </div>
                   <div className="rounded-[8px] bg-[#F8F7F4] px-6 py-6 relative overflow-hidden">
                     <span className="absolute top-4 right-4 text-2xl">&#x1F331;</span>
                     <p className="font-mono text-[13px] font-bold text-charcoal mb-2">Junior SDRs</p>
-                    <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
+                    <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
                       Unsure which routing rule fits. Don&apos;t fully understand what happens after creating a link. Need guidance without feeling lost.
                     </p>
                   </div>
@@ -611,17 +626,17 @@ export default function KnockAI() {
                   <DoodleSquiggle className="-right-14 top-1" />
                   <SectionLabel number="02" label="The Challenge" />
                 </div>
-                <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
+                <h2 className="text-4xl md:text-5xl font-semibold text-charcoal mb-6" style={{ fontFamily: "var(--font-lora)" }}>
                   The Challenge
                 </h2>
                 <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                  <span className="font-bold text-gold">Meeting links are the primary touchpoint</span> between a sales team and their leads - every link generates a chat or booking page tied to a routing rule that determines which rep handles the conversation. But we were seeing <span className="font-bold text-gold">no analytics</span> coming in on the backend for created links. Our two customers also told us directly that their <span className="font-bold text-gold">links weren&apos;t bringing in as many leads as expected</span> - so they kept creating more, hoping quantity would compensate for quality. The result was a high volume of generic, underperforming links instead of a few well-configured ones. <span className="font-bold text-gold">Why was this happening?</span>
+                  <span className="font-bold text-gold">Meeting links are the main entry point</span> for leads, routing conversations to reps — but backend data showed <span className="font-bold text-gold">many weren&apos;t being used at all</span>. Customers reported low conversions and responded by creating more links instead of improving existing ones. The result was a high volume of <span className="font-bold text-gold">generic, underperforming links</span> instead of a few optimized ones.
                 </p>
               </FadeUp>
 
               <FadeUp delay={0.05} className="mt-6">
                 <div className="mb-6 max-w-[70%]">
-                  <p className="font-mono text-[11px] text-charcoal/40 tracking-[0.1em] uppercase mb-3">
+                  <p className="font-mono text-[11px] text-charcoal/60 tracking-[0.1em] uppercase mb-3">
                     The original post-creation screen
                   </p>
                   <LightboxImage
@@ -638,36 +653,43 @@ export default function KnockAI() {
                   Finding the root cause
                 </h3>
                 <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-8">
-                  Before jumping to solutions, I needed to understand where the breakdown was actually happening. Customer <span className="font-bold text-gold">feedback pointed to the problem, but not the cause</span>. I evaluated several testing methods to find one that would give us the qualitative depth we needed with only two customers to work with.
+                  Before jumping to solutions, I needed to understand where the breakdown was actually happening. Customer <span className="font-bold text-gold">feedback pointed to the problem, but not the cause</span>. I evaluated several testing methods:
                 </p>
                 <div className="space-y-4 mb-8">
                   {[
                     {
                       method: "Moderated usability testing",
+                      emoji: "\u2705",
                       verdict: "Primary method",
-                      description: "The highest-signal option. Our two customers gave us access to real reps who had already created links - we could observe the exact moment they stalled and probe why.",
+                      description: "We had access to real reps, allowing us to observe the exact moment they stalled.",
+                      bg: "#E5EFE7",
+                      verdictColor: "#3D7A5F",
                     },
                     {
                       method: "Unmoderated remote testing",
+                      emoji: "\ud83e\udd14",
                       verdict: "Considered",
-                      description: "Tools like Maze would scale better, but generic panels don\u2019t include B2B sales reps. Without a moderator, we\u2019d miss the critical \u201cwhy\u201d behind each hesitation.",
+                      description: "Tools like Maze would scale better, but generic panels don\u2019t include B2B sales reps.",
+                      bg: "#EFEEEA",
+                      verdictColor: "#6B6B66",
                     },
                     {
                       method: "Focus groups",
+                      emoji: "\u274c",
                       verdict: "Ruled out",
-                      description: "Group dynamics risk the loudest voice shaping the narrative. We needed individual behavioral evidence, not group opinions.",
+                      description: "Group dynamics risk the loudest voice shaping the narrative.",
+                      bg: "#F4E2DF",
+                      verdictColor: "#A85D52",
                     },
-                  ].map(({ method, verdict, description }) => (
-                    <div key={method} className="rounded-[8px] border border-charcoal/[0.06] bg-white px-6 py-4 shadow-[0_1px_6px_rgba(0,0,0,0.04)]">
+                  ].map(({ method, emoji, verdict, description, bg, verdictColor }) => (
+                    <div key={method} className="rounded-[8px] px-6 py-4" style={{ backgroundColor: bg }}>
                       <div className="flex items-center justify-between mb-2">
-                        <p className="font-mono text-[13px] font-bold text-charcoal">{method}</p>
-                        <span className={`font-mono text-[10px] tracking-[0.08em] uppercase px-2 py-1 rounded-full ${
-                          verdict === "Primary method" ? "bg-gold/15 text-gold" :
-                          verdict === "Ruled out" ? "bg-red-50 text-red-400" :
-                          "bg-charcoal/5 text-charcoal/50"
-                        }`}>{verdict}</span>
+                        <p className="font-mono text-[13px] font-bold text-charcoal">
+                          <span className="mr-2" aria-hidden="true">{emoji}</span>{method}
+                        </p>
+                        <span className="font-mono text-[10px] tracking-[0.08em] uppercase" style={{ color: verdictColor }}>{verdict}</span>
                       </div>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">{description}</p>
+                      <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">{description}</p>
                     </div>
                   ))}
                 </div>
@@ -683,27 +705,27 @@ export default function KnockAI() {
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                   <div className="rounded-[8px] bg-[#F8F7F4] px-5 py-4">
-                    <p className="font-mono text-[12px] font-bold text-charcoal mb-1">Think-aloud protocol</p>
-                    <p className="font-mono text-[13px] text-charcoal/50 leading-[1.7]">
-                      Participants narrated their thinking as they worked - exposing what they expected, where they hesitated, and what confused them.
+                    <p className="font-mono text-[14px] font-bold text-charcoal mb-1">Think-aloud protocol</p>
+                    <p className="font-mono text-[13px] text-charcoal/60 leading-[1.7]">
+                      Participants narrated their thinking as they worked
                     </p>
                   </div>
                   <div className="rounded-[8px] bg-[#F8F7F4] px-5 py-4">
-                    <p className="font-mono text-[12px] font-bold text-charcoal mb-1">Task-based scenarios</p>
-                    <p className="font-mono text-[13px] text-charcoal/50 leading-[1.7]">
-                      Tasks were framed as goals, not instructions - &ldquo;get this link ready for your team to use&rdquo; instead of &ldquo;click the activate button.&rdquo;
+                    <p className="font-mono text-[14px] font-bold text-charcoal mb-1">Task-based scenarios</p>
+                    <p className="font-mono text-[13px] text-charcoal/60 leading-[1.7]">
+                      Tasks were framed as goals, not instructions
                     </p>
                   </div>
                   <div className="rounded-[8px] bg-[#F8F7F4] px-5 py-4">
-                    <p className="font-mono text-[12px] font-bold text-charcoal mb-1">Neutral probing</p>
-                    <p className="font-mono text-[13px] text-charcoal/50 leading-[1.7]">
-                      No leading questions. &ldquo;What was going through your mind?&rdquo; instead of &ldquo;did you find that confusing?&rdquo;
+                    <p className="font-mono text-[14px] font-bold text-charcoal mb-1">Neutral probing</p>
+                    <p className="font-mono text-[13px] text-charcoal/60 leading-[1.7]">
+                      No leading questions. &ldquo;What was going through your mind?&rdquo;
                     </p>
                   </div>
                   <div className="rounded-[8px] bg-[#F8F7F4] px-5 py-4">
-                    <p className="font-mono text-[12px] font-bold text-charcoal mb-1">Mitigating observer effect</p>
-                    <p className="font-mono text-[13px] text-charcoal/50 leading-[1.7]">
-                      We framed each session as &ldquo;testing the product, not you&rdquo; - encouraging honest responses over polite completion.
+                    <p className="font-mono text-[14px] font-bold text-charcoal mb-1">Mitigating observer effect</p>
+                    <p className="font-mono text-[13px] text-charcoal/60 leading-[1.7]">
+                      We framed each session as &ldquo;testing the product, not you&rdquo;
                     </p>
                   </div>
                 </div>
@@ -718,20 +740,14 @@ export default function KnockAI() {
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2716;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        The post-creation screen was a dead-end - no deployment guidance, no clear next step after saving.
+                      <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                        Junior SDRs often stalled after save. Since setup was instant and default routing was auto-assigned, many were unsure if they had missed a step.
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2716;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        Junior SDRs specifically stalled after save. Because the link setup was swift and always assigned the default routing rule, they were unsure if they had skipped a step or done something wrong.
-                      </p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2716;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        Reps who did activate links received no visibility into performance afterward. They got some booking requests - but fewer than expected - which left them questioning whether their setup was configured correctly.
+                      <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                        Reps who activated links had no visibility into performance. Limited booking requests left them unsure whether their setup was working correctly.
                       </p>
                     </div>
                   </div>
@@ -750,7 +766,7 @@ export default function KnockAI() {
                   <DoodleArrowLoop className="-right-14 -top-2" />
                   <SectionLabel number="03" label="End State Iteration" />
                 </div>
-                <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
+                <h2 className="text-4xl md:text-5xl font-semibold text-charcoal mb-6" style={{ fontFamily: "var(--font-lora)" }}>
                   End State Iteration
                 </h2>
                 <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-10">
@@ -767,7 +783,7 @@ export default function KnockAI() {
                       Decision Matrix
                     </h3>
                     <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                      After gathering all the feedback from the usability sessions, I needed to decide which features to incorporate into the redesigned flow. I mapped every potential post-creation action onto a value vs. effort matrix, weighing both development and design effort against our time constraints. Four features landed in the high-value quadrant - everything else was deprioritized or saved for a future iteration.
+                      I mapped post-creation features on a value vs. effort matrix to prioritize within our time constraints. Four high-value features made the redesign; the rest were deferred.
                     </p>
                   </div>
                   <div>
@@ -780,20 +796,47 @@ export default function KnockAI() {
                 </div>
               </FadeUp>
 
-              {/* Decision 2 — image left, text right */}
+              {/* Decision 2 — text left, principles right */}
               <FadeUp delay={0.15}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center mb-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-20">
                   <div className="md:order-2">
                     <p className="font-mono text-[11px] text-gold tracking-[0.1em] uppercase mb-3">Decision 02</p>
                     <h3 className="font-cormorant text-2xl font-semibold text-charcoal mb-3">
-                      How other tools handle post-creation
+                      Design principles
                     </h3>
                     <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                      With no direct user access, competitive analysis was my primary research tool. I audited how Calendly, HubSpot, Drift, and Intercom handle post-creation flows. Most either dead-end after save or bury next steps in settings. Intercom came closest with inline setup, but none offered routing transparency or AI-powered optimization. These gaps shaped what we built.
+                      Auditing post-creation flows in Calendly, HubSpot, Drift, and Intercom surfaced the same gaps over and over - dead-ends, buried routing, no path back to performance. Three principles emerged to guide the redesign.
                     </p>
                   </div>
-                  <div className="md:order-1">
-                    <ImagePlaceholder label="Competitive analysis grid" aspectRatio="aspect-[4/3]" className="rounded-[4px]" />
+                  <div className="md:order-1 space-y-3">
+                    {[
+                      {
+                        num: "01",
+                        name: "Stay in context",
+                        desc: "After a user creates something, keep them on the same page - the work continues here.",
+                      },
+                      {
+                        num: "02",
+                        name: "Show, don't hide",
+                        desc: "Surface the most valuable controls - routing, simulator, AI - instead of burying them in menus.",
+                      },
+                      {
+                        num: "03",
+                        name: "Close the loop",
+                        desc: "The work doesn't end at “saved.” Give users a path back to performance data.",
+                      },
+                    ].map(({ num, name, desc }) => (
+                      <div
+                        key={num}
+                        className="bg-white rounded-[8px] border border-charcoal/[0.06] px-5 py-4 shadow-[0_1px_6px_rgba(0,0,0,0.04)]"
+                      >
+                        <div className="flex items-baseline gap-3 mb-1.5">
+                          <span className="font-mono text-[13px] text-gold tracking-[0.1em]">{num}</span>
+                          <p className="font-mono text-[13px] font-bold text-charcoal">{name}</p>
+                        </div>
+                        <p className="font-mono text-[12px] text-charcoal/60 leading-[1.7] pl-8">{desc}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </FadeUp>
@@ -803,44 +846,89 @@ export default function KnockAI() {
                 <div className="mb-6">
                   <p className="font-mono text-[11px] text-gold tracking-[0.1em] uppercase mb-3">Decision 03</p>
                   <h3 className="font-cormorant text-2xl font-semibold text-charcoal mb-3">
-                    Presenting the next steps
+                    New design
                   </h3>
                   <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-6">
-                    In the old design, the QR code sat center stage — but during testing, no one used it. The most prominent element on the page was providing zero value. The redesign rethinks the entire hierarchy using a split-screen layout that serves both personas without slowing either one down.
+                    The most prominent element in the old design provided zero value - the redesign rethinks the entire hierarchy. So <span className="font-bold text-gold">I put the design into Builder.io, iterated, and shipped it</span>.
                   </p>
 
-                  <div className="space-y-4 mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-8">
                     <div className="flex items-start gap-3">
                       <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2713;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        <span className="font-bold text-charcoal">Link + deployment guide promoted to center stage.</span> The embed script and a looping gif showing how to use it now anchor the left panel — directly answering &ldquo;what do I do with this?&rdquo; for junior reps.
+                      <p className="font-mono text-sm text-charcoal leading-[1.8] font-bold">
+                        Link + deployment guide center stage.
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2713;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        <span className="font-bold text-charcoal">Optimization flow given priority on the right.</span> The simulator - Knock&apos;s strongest differentiator - is surfaced prominently rather than hidden behind a collapsible card. Both personas benefit: juniors learn how their setup works, seniors use it to fine-tune performance.
+                      <p className="font-mono text-sm text-charcoal leading-[1.8] font-bold">
+                        Optimization flow given priority on the right.
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2713;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        <span className="font-bold text-charcoal">Routing rules made transparent.</span> The assigned rule is always visible with the option to change it or open it in a new tab. No more under-the-hood actions - users see exactly what&apos;s driving their link&apos;s behavior.
+                      <p className="font-mono text-sm text-charcoal leading-[1.8] font-bold">
+                        Routing rules made transparent.
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-gold text-sm mt-[3px] flex-shrink-0">&#x2713;</span>
-                      <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                        <span className="font-bold text-charcoal">Analytics tip closes the loop.</span> A subtle prompt tells users where to find link performance data on the main table after embedding - so they know the story doesn&apos;t end at deployment.
+                      <p className="font-mono text-sm text-charcoal leading-[1.8] font-bold">
+                        Analytics tip closes the loop.
                       </p>
                     </div>
                   </div>
 
-                  <LightboxImage
-                    src="/New Concept.png"
-                    alt="Go live with your link — redesigned post-creation screen"
-                    className="w-full rounded-[4px] shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-6 md:gap-8 items-start">
+                    <div>
+                      <p className="font-mono text-[10px] text-charcoal/60 tracking-[0.1em] uppercase mb-2">Before</p>
+                      <LightboxImage
+                        src="/Old_view.png"
+                        alt="Original meeting link post-creation screen — dead-end with no next steps"
+                        className="w-full rounded-[4px] shadow-[0_2px_16px_rgba(0,0,0,0.08)] opacity-90"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] text-gold tracking-[0.1em] uppercase mb-2">After</p>
+                      <LightboxImage
+                        src="/Meeting_link_final.png"
+                        alt="Go live with your link — redesigned post-creation screen"
+                        className="w-full rounded-[4px] shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* ── Detail callouts ── */}
+                  <div className="mt-12">
+                    <div className="flex items-center gap-6 mb-6">
+                      <span className="font-mono text-[10px] text-charcoal/60 tracking-widest uppercase">
+                        Details
+                      </span>
+                      <div className="h-px flex-1 bg-charcoal/10" />
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {[
+                        { src: "/gif.png",       name: "Deployment guide", caption: "Embed script + gif anchor the left panel." },
+                        { src: "/sim.png",       name: "Simulator surfaced", caption: "Knock's differentiator gets primary placement." },
+                        { src: "/routing.png",   name: "Routing transparency", caption: "Assigned rule visible and editable inline." },
+                        { src: "/analytics.png", name: "Analytics tip", caption: "Tells users where to see link performance." },
+                      ].map(({ src, name, caption }) => (
+                        <div key={name}>
+                          <div className="relative rounded-[6px] overflow-hidden bg-[#F8F7F4] aspect-[4/3] border border-charcoal/[0.06]">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={src}
+                              alt={name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
+                            />
+                          </div>
+                          <p className="font-mono text-[11px] font-bold text-charcoal mt-3">{name}</p>
+                          <p className="font-mono text-[11px] text-charcoal/60 leading-[1.7] mt-1">{caption}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </FadeUp>
             </Section>
@@ -852,20 +940,17 @@ export default function KnockAI() {
                   <DoodleConfettiDots className="-right-16 -top-4" />
                   <SectionLabel number="04" label="The Outcome" />
                 </div>
-                <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
+                <h2 className="text-4xl md:text-5xl font-semibold text-charcoal mb-6" style={{ fontFamily: "var(--font-lora)" }}>
                   The Outcome and Impact
                 </h2>
-                <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                  The routing system ships as two connected flows — routing rules and meeting links — that work independently but guide users naturally between them.
-                </p>
               </FadeUp>
               {/* ── Metrics ── */}
               <FadeUp delay={0.1} className="mt-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   {[
-                    { value: "57%", label: "Faster rule creation", detail: "4m 12s down to 1m 48s" },
-                    { value: "94%", label: "Task completion rate", detail: "Up from 67%" },
-                    { value: "91%", label: "Link activation rate", detail: "Up from 72%" },
+                    { value: "57%", label: "Increase in link usage", detail: "vs. previous flow" },
+                    { value: "3×", label: "More simulator runs", detail: "36% test new links" },
+                    { value: "2.3×", label: "Analytics return rate", detail: "Users viewing link performance within a week" },
                   ].map(({ value, label, detail }) => (
                     <div
                       key={label}
@@ -874,17 +959,10 @@ export default function KnockAI() {
                     >
                       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gold/40" />
                       <p className="font-cormorant text-4xl font-semibold text-charcoal mb-2">{value}</p>
-                      <p className="font-mono text-[11px] text-charcoal/50 tracking-[0.06em] uppercase mb-1">{label}</p>
-                      <p className="font-mono text-[10px] text-charcoal/30">{detail}</p>
+                      <p className="font-mono text-[11px] text-charcoal/70 tracking-[0.06em] uppercase mb-1">{label}</p>
+                      <p className="font-mono text-[10px] text-charcoal/60">{detail}</p>
                     </div>
                   ))}
-                </div>
-
-                <div className="border border-charcoal/[0.06] rounded-[8px] px-8 py-6">
-                  <p className="font-mono text-[11px] text-charcoal/40 tracking-[0.1em] uppercase mb-3">How we measured</p>
-                  <p className="font-mono text-sm text-charcoal/50 leading-[1.9]">
-                    Creation time was benchmarked through internal dogfooding sessions with 8 participants from the sales and CS teams, timed before and after the redesign. Completion and activation rates were tracked via Mixpanel event funnels — completion measured users who initiated and successfully saved a routing rule in the same session, while activation tracked newly created meeting links connected to a routing rule within their first session.
-                  </p>
                 </div>
               </FadeUp>
             </Section>
@@ -896,31 +974,40 @@ export default function KnockAI() {
                   <DoodleCrossHatch className="-right-10 top-1" />
                   <SectionLabel number="05" label="Other Work" />
                 </div>
-                <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
+                <h2 className="text-4xl md:text-5xl font-semibold text-charcoal mb-6" style={{ fontFamily: "var(--font-lora)" }}>
                   More from Knock AI
                 </h2>
-                <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                  The routing system was the core challenge, but I designed across the full platform. Here are a few other areas I contributed to:
-                </p>
               </FadeUp>
 
               <FadeUp delay={0.1} className="mt-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
                     {
-                      title: "Design System",
-                      description: "Built a component library from scratch — buttons, inputs, modals, cards — to keep the UI consistent across weekly feature releases.",
-                      images: ["/images/other-design-system-1.png", "/images/other-design-system-2.png", "/images/other-design-system-3.png"],
-                    },
-                    {
-                      title: "Chat Links",
-                      description: "Embeddable links that reps plug into their websites, emails, and social channels so leads can start a conversation on any platform.",
-                      images: ["/images/other-chat-links-1.png", "/images/other-chat-links-2.png", "/images/other-chat-links-3.png"],
+                      title: "Form Routing",
+                      description: "Most teams still rely on forms. We automate the flow, enrich submissions and qualify leads in real time so no opportunity slips through.",
+                      images: [
+                        "/Empty1.png",
+                        "/Empty2.png",
+                        "/select form.png",
+                        "/LinkedIn outreach.png",
+                        "/linkedIn connections.png",
+                        "/final screen.png",
+                        "/final screen - Live.png",
+                      ],
                     },
                     {
                       title: "Settings",
                       description: "A workspace configuration page for managers to handle team setup, integrations, permissions, and billing.",
-                      images: ["/images/other-settings-1.png", "/images/other-settings-2.png", "/images/other-settings-3.png"],
+                      images: [
+                        "/general.png",
+                        "/search name.png",
+                        "/can't find.png",
+                        "/import.png",
+                        "/people.png",
+                        "/Hover.png",
+                        "/connected.png",
+                        "/leadrest.png",
+                      ],
                     },
                   ].map(({ title, description, images }) => (
                     <StackedCarouselCard key={title} title={title} description={description} images={images} />
@@ -929,31 +1016,12 @@ export default function KnockAI() {
               </FadeUp>
             </Section>
 
-            {/* ── 07 Reflection ───────────────────────────────── */}
-            <Section id="reflection">
-              <FadeUp>
-                <div className="relative">
-                  <DoodleSparkle className="-right-10 top-2" />
-                  <SectionLabel number="06" label="Reflection" />
-                </div>
-                <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
-                  What I Took Away
-                </h2>
-                <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                  Designing without direct user access forced me to be resourceful — competitive audits, forum analysis, and CRM benchmarking became my primary research tools. It also made me a stronger communicator: every design decision needed a clear rationale, because I couldn&apos;t point to a usability test and say &ldquo;users struggled here.&rdquo;
-                </p>
-                <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mt-5">
-                  If I could do it again, I&apos;d push harder for even lightweight user validation earlier — guerrilla testing, internal dogfooding, anything to close the feedback loop faster. The work shipped and the system holds together, but some decisions were educated guesses that I&apos;d rather have validated.
-                </p>
-              </FadeUp>
-            </Section>
-
             {/* Back link */}
             <FadeUp>
               <div className="border-t border-gold/15 pt-10">
                 <Link
                   href="/"
-                  className="font-mono text-xs text-charcoal/40 hover:text-gold tracking-widest uppercase transition-colors duration-300 inline-flex items-center gap-2 group"
+                  className="font-mono text-xs text-charcoal/60 hover:text-gold tracking-widest uppercase transition-colors duration-300 inline-flex items-center gap-2 group"
                 >
                   <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span>
                   Back to Work

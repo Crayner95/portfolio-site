@@ -10,9 +10,9 @@ const airbnbSections = [
   { id: "product", label: "The Product", number: "01" },
   { id: "audit", label: "The Audit", number: "02" },
   { id: "ideation", label: "Ideation", number: "03" },
-  { id: "lofi", label: "Low Fidelity", number: "04" },
-  { id: "hifi", label: "High Fidelity", number: "05" },
-  { id: "reflection", label: "Growth", number: "06" },
+  // { id: "lofi", label: "Low Fidelity", number: "04" },
+  { id: "hifi", label: "High Fidelity", number: "04" },
+  { id: "reflection", label: "Reflection", number: "05" },
 ];
 
 // ── Section Wrapper ───────────────────────────────────────────────────────────
@@ -38,7 +38,7 @@ function SectionLabel({ number, label }: { number: string; label: string }) {
     <div className="flex items-center gap-3 mb-5">
       <span className="font-mono text-[12px] text-[#FF385C] tracking-widest">{number}</span>
       <div className="h-px w-8 bg-[#FF385C]/30" />
-      <span className="font-mono text-[12px] text-charcoal/50 tracking-widest uppercase">
+      <span className="font-mono text-[12px] text-charcoal/60 tracking-widest uppercase">
         {label}
       </span>
     </div>
@@ -180,6 +180,7 @@ function useSwipe(onLeft: () => void, onRight: () => void) {
 
 const wireframes = ["/lowfid1.png", "/lowfid2.png", "/lowfid3.png", "/lowfid4.png"];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function WireframeCarousel() {
   const [open, setOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -220,19 +221,72 @@ function WireframeCarousel() {
   return (
     <>
       <FadeUp delay={0.1} className="mt-10">
-        <div className="grid grid-cols-2 gap-5">
+        {/* ── Hero wireframe with side arrows ── */}
+        <div
+          className="relative group"
+          onTouchStart={swipe.onTouchStart}
+          onTouchEnd={swipe.onTouchEnd}
+        >
+          <div
+            className="cursor-zoom-in rounded-[8px] overflow-hidden bg-[#F8F7F4] shadow-[0_2px_16px_rgba(0,0,0,0.06)]"
+            onClick={() => setOpen(true)}
+          >
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentIndex}
+                src={wireframes[currentIndex]}
+                alt={`Low fidelity wireframe ${currentIndex + 1}`}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.25 }}
+                className="w-full block"
+              />
+            </AnimatePresence>
+          </div>
+
+          {/* Prev arrow */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentIndex((i) => (i - 1 + wireframes.length) % wireframes.length);
+            }}
+            aria-label="Previous wireframe"
+            className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] items-center justify-center text-charcoal/70 hover:text-charcoal transition-all duration-200 opacity-0 group-hover:opacity-100"
+          >
+            &larr;
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentIndex((i) => (i + 1) % wireframes.length);
+            }}
+            aria-label="Next wireframe"
+            className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] items-center justify-center text-charcoal/70 hover:text-charcoal transition-all duration-200 opacity-0 group-hover:opacity-100"
+          >
+            &rarr;
+          </button>
+        </div>
+
+        {/* ── Thumbnail strip ── */}
+        <div className="grid grid-cols-4 gap-3 mt-5">
           {wireframes.map((src, i) => (
-            <div
+            <button
               key={src}
-              className="cursor-zoom-in group overflow-hidden rounded-[8px]"
-              onClick={() => { setCurrentIndex(i); setOpen(true); }}
+              onClick={() => setCurrentIndex(i)}
+              aria-label={`View wireframe ${i + 1}`}
+              className={`rounded-[6px] overflow-hidden transition-all duration-300 ${
+                i === currentIndex
+                  ? "ring-2 ring-charcoal/70 opacity-100"
+                  : "ring-1 ring-charcoal/10 opacity-60 hover:opacity-100"
+              }`}
             >
               <img
                 src={src}
-                alt={`Low fidelity wireframe ${i + 1}`}
-                className="w-full rounded-[8px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                alt={`Wireframe ${i + 1} thumbnail`}
+                className="w-full block"
               />
-            </div>
+            </button>
           ))}
         </div>
       </FadeUp>
@@ -306,7 +360,11 @@ function WireframeCarousel() {
 }
 
 // ── High Fidelity Carousel ──────────────────────────────────────────────────
-const highFidelity = ["/highfid1.png", "/highfid2.png", "/highfid3.png", "/highfid4.png"];
+const highFidelity = [
+  { src: "/main_view_1.png", caption: "Services live inside the Homes flow - no separate tab to discover them" },
+  { src: "/main_view_2.png", caption: "Top services in the area, surfaced at the moment of choice" },
+  { src: "/main_view_3.png", caption: "Transparent pricing inline - services check out alongside the stay" },
+];
 
 function HighFidelityCarousel() {
   const [open, setOpen] = useState(false);
@@ -348,19 +406,87 @@ function HighFidelityCarousel() {
   return (
     <>
       <FadeUp delay={0.1} className="mt-10">
-        <div className="grid grid-cols-2 gap-5">
-          {highFidelity.map((src, i) => (
-            <div
+        {/* ── Hero mockup with side arrows ── */}
+        <div
+          className="relative group"
+          onTouchStart={swipe.onTouchStart}
+          onTouchEnd={swipe.onTouchEnd}
+        >
+          <div
+            className="relative cursor-zoom-in rounded-[8px] overflow-hidden bg-[#F8F7F4] shadow-[0_2px_16px_rgba(0,0,0,0.06)]"
+            onClick={() => setOpen(true)}
+          >
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentIndex}
+                src={highFidelity[currentIndex].src}
+                alt={`High fidelity mockup ${currentIndex + 1}`}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.25 }}
+                className="w-full block"
+              />
+            </AnimatePresence>
+
+            {/* ── Caption (top-left) ── */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.25 }}
+                className="absolute top-3 left-3 md:top-4 md:left-4 max-w-[70%] pointer-events-none"
+              >
+                <span className="inline-block font-mono text-[10px] md:text-[11px] text-white tracking-[0.04em] bg-charcoal px-3 py-1.5 rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.18)]">
+                  {highFidelity[currentIndex].caption}
+                </span>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentIndex((i) => (i - 1 + highFidelity.length) % highFidelity.length);
+            }}
+            aria-label="Previous mockup"
+            className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] items-center justify-center text-charcoal/70 hover:text-charcoal transition-all duration-200 opacity-0 group-hover:opacity-100"
+          >
+            &larr;
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentIndex((i) => (i + 1) % highFidelity.length);
+            }}
+            aria-label="Next mockup"
+            className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] items-center justify-center text-charcoal/70 hover:text-charcoal transition-all duration-200 opacity-0 group-hover:opacity-100"
+          >
+            &rarr;
+          </button>
+        </div>
+
+        {/* ── Thumbnail strip ── */}
+        <div className="grid grid-cols-3 gap-3 mt-5">
+          {highFidelity.map(({ src }, i) => (
+            <button
               key={src}
-              className="cursor-zoom-in group overflow-hidden rounded-[8px]"
-              onClick={() => { setCurrentIndex(i); setOpen(true); }}
+              onClick={() => setCurrentIndex(i)}
+              aria-label={`View mockup ${i + 1}`}
+              className={`rounded-[6px] overflow-hidden transition-all duration-300 ${
+                i === currentIndex
+                  ? "ring-2 ring-charcoal/70 opacity-100"
+                  : "ring-1 ring-charcoal/10 opacity-60 hover:opacity-100"
+              }`}
             >
               <img
                 src={src}
-                alt={`High fidelity mockup ${i + 1}`}
-                className="w-full rounded-[8px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                alt={`Mockup ${i + 1} thumbnail`}
+                className="w-full block"
               />
-            </div>
+            </button>
           ))}
         </div>
       </FadeUp>
@@ -388,7 +514,7 @@ function HighFidelityCarousel() {
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentIndex}
-                  src={highFidelity[currentIndex]}
+                  src={highFidelity[currentIndex].src}
                   alt={`High fidelity mockup ${currentIndex + 1}`}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -469,7 +595,7 @@ export default function AirbnbConcept() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="font-mono text-[10px] text-charcoal/40 tracking-widest uppercase mb-5"
+          className="font-mono text-[10px] text-charcoal/60 tracking-widest uppercase mb-5"
         >
           Concept Project
         </motion.span>
@@ -487,7 +613,7 @@ export default function AirbnbConcept() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="font-mono text-xs md:text-sm text-charcoal/50 max-w-lg leading-relaxed text-center px-6"
+          className="font-mono text-xs md:text-sm text-charcoal/60 max-w-lg leading-relaxed text-center px-6"
         >
           Auditing and reimagining how Airbnb&apos;s newest feature fits into the platform experience.
         </motion.p>
@@ -513,11 +639,11 @@ export default function AirbnbConcept() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0">
               {[
                 { label: "Type", value: "Concept Project" },
-                { label: "Platform", value: "Mobile App" },
+                { label: "Platform", value: "Desktop App" },
                 { label: "My Role", value: "UX Audit & Redesign" },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <p className="font-mono text-[10px] text-charcoal/30 tracking-[0.15em] uppercase mb-3">
+                  <p className="font-mono text-[10px] text-charcoal/60 tracking-[0.15em] uppercase mb-3">
                     {label}
                   </p>
                   <p className="text-[15px] text-charcoal/80 leading-snug">
@@ -548,13 +674,19 @@ export default function AirbnbConcept() {
                 What caught my eye
               </h2>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                Airbnb released a new feature — <span className="font-bold text-[#FF385C]">Services</span>. A dedicated tab for booking local experiences like photography, chef services, and guided tours. As a long-time Airbnb user, something felt off. It seemed detached from the familiar Airbnb flow I knew.
+                Airbnb released a new feature - <span className="font-bold text-[#FF385C]">Services</span>. A dedicated tab for booking local experiences like photography. As a long-time Airbnb user, something felt off. It seemed detached from the familiar Airbnb flow.
               </p>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mt-5">
-                A few questions came to mind: Would established users readily discover this new tab? How does &ldquo;Services&rdquo; fit in with the existing user flow? As Airbnb adds more tabs, are these meant to be used together or function as standalone products? I decided to find out.
+                A few questions came to mind: Would established users readily discover this new tab? How does &ldquo;Services&rdquo; fit in with the existing user flow? As Airbnb adds more tabs, are these meant to be used together or function as standalone products?
               </p>
             </FadeUp>
-            {/* TODO: Screenshot of the Services tab */}
+            <FadeUp delay={0.1} className="mt-10">
+              <LightboxImage
+                src="/spotlight.png"
+                alt="Airbnb's Services feature — the new tab that caught my eye"
+                className="w-full rounded-[8px] shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
+              />
+            </FadeUp>
           </Section>
 
           {/* ── 02 The Audit ──────────────────────────────── */}
@@ -565,69 +697,127 @@ export default function AirbnbConcept() {
                 Mapping the friction
               </h2>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                I mapped out the full user journey across four stages — <span className="font-bold text-[#FF385C]">discovery</span>, <span className="font-bold text-[#FF385C]">filtering</span>, <span className="font-bold text-[#FF385C]">evaluation</span>, and <span className="font-bold text-[#FF385C]">booking</span> — to see where the experience breaks down.
+                I mapped out the full user journey across four stages - <span className="font-bold text-[#FF385C]">discovery</span>, <span className="font-bold text-[#FF385C]">filtering</span>, <span className="font-bold text-[#FF385C]">evaluation</span>, and <span className="font-bold text-[#FF385C]">booking</span> - to see where the experience breaks down.
               </p>
             </FadeUp>
 
+            {/* TL;DR summary */}
+            <FadeUp delay={0.04} className="mt-8">
+              <div className="border-l-2 border-[#FF385C] bg-[#FFF1F3] pl-5 pr-5 py-4 rounded-r-[6px]">
+                <p className="font-mono text-[10px] text-[#FF385C] tracking-[0.15em] uppercase mb-2">TL;DR</p>
+                <p className="font-mono text-sm text-charcoal/80 leading-[1.7]">
+                  I observed users across 4 booking stages, clustered findings into 3 friction themes, and formed a hypothesis to guide the redesign.
+                </p>
+              </div>
+            </FadeUp>
+
+            {/* ── Phase label: METHOD ── */}
+            <FadeUp className="mt-14 mb-6">
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-[10px] text-charcoal/60 tracking-[0.15em] uppercase">Method</span>
+                <div className="h-px flex-1 bg-charcoal/15" />
+              </div>
+            </FadeUp>
+
             {/* Research Approach */}
-            <FadeUp delay={0.05} className="mt-10 mb-14">
+            <FadeUp delay={0.05} className="mb-14">
               <div className="rounded-[8px] bg-white shadow-[0_1px_6px_rgba(0,0,0,0.04)] border border-charcoal/[0.06] px-6 py-5">
                 <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-3">Research approach</p>
-                <p className="font-mono text-sm text-charcoal/50 leading-[1.8] mb-4">
-                  I sat down with <span className="font-bold text-charcoal">3 friends and 2 family members</span> who are frequent Airbnb users and deeply familiar with the platform. I walked them through the Services feature and observed where they hesitated, what confused them, and what they expected to happen.
+                <p className="font-mono text-sm text-charcoal/60 leading-[1.8] mb-4">
+                  I conducted <span className="font-bold text-[#FF385C]">deep interviews with 2 friends (Eli and Belen)</span> who frequently use Airbnb - sitting alongside them through the Services flow and observed all points of friction.
                 </p>
-                <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                  Alongside this, I ran <span className="font-bold text-charcoal">synthetic user research using AI</span> — simulating different traveler personas to stress-test my assumptions at scale. This gave me a broader lens on edge cases and behavioral patterns that a small group alone wouldn&apos;t surface. The combination of real conversations and AI-driven analysis shaped the four friction stages below.
+                <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                  To go broader, I ran <span className="font-bold text-[#FF385C]">AI-powered synthetic research at scale</span> across different traveler personas - stress-testing edge cases and behavioral patterns a small sample couldn&apos;t surface alone.
                 </p>
+              </div>
+            </FadeUp>
+
+            {/* ── Phase label: JOURNEY FRICTION ── */}
+            <FadeUp className="mt-14 mb-6">
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-[10px] text-charcoal/60 tracking-[0.15em] uppercase">Journey friction</span>
+                <div className="h-px flex-1 bg-charcoal/15" />
               </div>
             </FadeUp>
 
             {/* Discovery */}
             <FadeUp delay={0.1}>
-              <div className="border-l-2 border-[#FF385C]/30 pl-6 mb-10">
-                <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Discovery</p>
-                <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                  How do users find out Services exists? Is the tab visible enough? What happens if they never tap it?
-                </p>
-                {/* TODO: Add screenshot / annotation */}
+              <div className="border-l-2 border-[#FF385C]/30 pl-6 mb-10 grid grid-cols-1 md:grid-cols-[1fr_240px] gap-6 items-center">
+                <div>
+                  <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Discovery</p>
+                  <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                    How do users find out Services exists? Is the tab visible enough? What happens if they never tap it?
+                  </p>
+                </div>
+                <LightboxImage
+                  src="/main.png"
+                  alt="Airbnb home — where users would discover Services"
+                  className="w-full rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+                />
               </div>
             </FadeUp>
 
             {/* Filtering */}
             <FadeUp delay={0.15}>
-              <div className="border-l-2 border-[#FF385C]/30 pl-6 mb-10">
-                <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Filtering</p>
-                <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                  Once inside, can users narrow down what they need? Are the categories clear? Does the filtering feel native to Airbnb?
-                </p>
-                {/* TODO: Add screenshot / annotation */}
+              <div className="border-l-2 border-[#FF385C]/30 pl-6 mb-10 grid grid-cols-1 md:grid-cols-[1fr_240px] gap-6 items-center">
+                <div>
+                  <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Filtering</p>
+                  <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                    Once inside, can users narrow down what they need? Are the categories clear? Does the filtering feel native to Airbnb?
+                  </p>
+                </div>
+                <LightboxImage
+                  src="/services.png"
+                  alt="Inside the Services tab — filtering categories"
+                  className="w-full rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+                />
               </div>
             </FadeUp>
 
             {/* Evaluation */}
             <FadeUp delay={0.2}>
-              <div className="border-l-2 border-[#FF385C]/30 pl-6 mb-10">
-                <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Evaluation</p>
-                <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                  How do users compare and evaluate services? Is there enough information to make a confident booking decision?
-                </p>
-                {/* TODO: Add screenshot / annotation */}
+              <div className="border-l-2 border-[#FF385C]/30 pl-6 mb-10 grid grid-cols-1 md:grid-cols-[1fr_240px] gap-6 items-center">
+                <div>
+                  <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Evaluation</p>
+                  <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                    How do users compare and evaluate services? Is there enough information to make a confident booking decision?
+                  </p>
+                </div>
+                <LightboxImage
+                  src="/eval.png"
+                  alt="Service detail — evaluation step"
+                  className="w-full rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+                />
               </div>
             </FadeUp>
 
             {/* Booking */}
             <FadeUp delay={0.25}>
-              <div className="border-l-2 border-[#FF385C]/30 pl-6">
-                <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Booking</p>
-                <p className="font-mono text-sm text-charcoal/50 leading-[1.8]">
-                  Does the booking flow feel familiar? Does it connect back to an existing stay, or is it completely isolated?
-                </p>
-                {/* TODO: Add screenshot / annotation */}
+              <div className="border-l-2 border-[#FF385C]/30 pl-6 grid grid-cols-1 md:grid-cols-[1fr_240px] gap-6 items-center">
+                <div>
+                  <p className="font-mono text-[11px] text-[#FF385C] tracking-[0.1em] uppercase mb-2">Booking</p>
+                  <p className="font-mono text-sm text-charcoal/60 leading-[1.8]">
+                    Does the booking flow feel familiar? Does it connect back to an existing stay, or is it completely isolated?
+                  </p>
+                </div>
+                <LightboxImage
+                  src="/book.png"
+                  alt="Booking flow — confirming a service"
+                  className="w-full rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+                />
+              </div>
+            </FadeUp>
+
+            {/* ── Phase label: PATTERNS ── */}
+            <FadeUp className="mt-14 mb-6">
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-[10px] text-charcoal/60 tracking-[0.15em] uppercase">Patterns</span>
+                <div className="h-px flex-1 bg-charcoal/15" />
               </div>
             </FadeUp>
 
             {/* Clustering */}
-            <FadeUp delay={0.3} className="mt-14">
+            <FadeUp delay={0.3}>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-6">
                 I took notes on all possible areas in which users struggled to understand something or expressed weariness to continue, and <span className="font-bold text-[#FF385C]">clustered them into themes</span>.
               </p>
@@ -641,7 +831,7 @@ export default function AirbnbConcept() {
             {/* Outlying Themes */}
             <FadeUp delay={0.35} className="mt-14">
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-10">
-                From the clusters and usability tests I was able to tag some outlying themes under which the users felt most taken aback throughout their booking journey. I then decided to move forward <span className="font-bold text-[#FF385C]">focusing my efforts on resolving tensions across these blocks</span>.
+                From the research and usability testing, several recurring friction themes emerged across the booking journey. I used these insights to <span className="font-bold text-[#FF385C]">identify the key areas of tension</span> and focused on addressing them.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
@@ -651,7 +841,7 @@ export default function AirbnbConcept() {
                     color: "#FF385C",
                     title: "Concept Clarity Gaps",
                     subtitle: "What's happening?",
-                    description: "Users struggle to understand what Services are (vs. Experiences) and when each search control should be used. This injects early-stage uncertainty that lingers throughout the flow.",
+                    description: "Users struggle to understand what Services are (vs. Experiences) and when each search control should be used.",
                     quote: "\"Is a cooking class under Experiences or Services?\"",
                   },
                   {
@@ -665,10 +855,10 @@ export default function AirbnbConcept() {
                   {
                     icon: "&#x1F4B0;",
                     color: "#00A699",
-                    title: "Feedback & Cost Transparency Issues",
+                    title: "Transparency Issues",
                     subtitle: "How much is it?",
-                    description: "Users don't receive timely feedback on how their inputs affect price or feasibility, which undermines confidence at the moment of commitment.",
-                    quote: "\"All of a sudden my cart jumps to an insane number, I didn't even know where it came from.\"",
+                    description: "No timely feedback on how inputs affect price or feasibility, undermining confidence early on.",
+                    quote: "\"My cart suddenly jumped to an insane number, I didn't even know where it came from.\"",
                   },
                 ].map(({ icon, color, title, subtitle, description, quote }) => (
                   <div
@@ -683,17 +873,25 @@ export default function AirbnbConcept() {
                       />
                       <div>
                         <p className="font-mono text-[13px] font-bold text-charcoal leading-tight">{title}</p>
-                        <p className="font-mono text-[11px] text-charcoal/40">{subtitle}</p>
+                        <p className="font-mono text-[11px] text-charcoal/60">{subtitle}</p>
                       </div>
                     </div>
-                    <p className="font-mono text-sm text-charcoal/50 leading-[1.8] mb-4 flex-1">
+                    <p className="font-mono text-sm text-charcoal leading-[1.8] mb-4 flex-1">
                       {description}
                     </p>
-                    <p className="font-mono text-[13px] text-charcoal/30 italic leading-[1.7]">
+                    <p className="font-mono text-[13px] text-charcoal/60 italic leading-[1.7]">
                       {quote}
                     </p>
                   </div>
                 ))}
+              </div>
+            </FadeUp>
+
+            {/* ── Phase label: HYPOTHESIS ── */}
+            <FadeUp className="mt-14 mb-6">
+              <div className="flex items-center gap-4">
+                <span className="font-mono text-[10px] text-charcoal/60 tracking-[0.15em] uppercase">Hypothesis</span>
+                <div className="h-px flex-1 bg-charcoal/15" />
               </div>
             </FadeUp>
 
@@ -703,7 +901,7 @@ export default function AirbnbConcept() {
                 Drawing up a hypothesis
               </h3>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-8">
-                Based on this research I was able to conclude a general hypothesis to where the pain points were rooted in and what could potentially be done to ease them.
+                Based on all this I was able to conclude a general hypothesis to where the pain points were rooted in.
               </p>
 
               <div className="rounded-[12px] bg-white shadow-[0_1px_6px_rgba(0,0,0,0.04)] border border-charcoal/[0.06] px-8 py-8 relative">
@@ -711,12 +909,12 @@ export default function AirbnbConcept() {
                   <span className="w-10 h-10 rounded-full bg-[#FF385C]/10 flex items-center justify-center text-lg">&#x1F9E0;</span>
                   <div>
                     <p className="font-mono text-[13px] font-bold text-charcoal">Hypothesis</p>
-                    <p className="font-mono text-[11px] text-charcoal/40">Overview</p>
+                    <p className="font-mono text-[11px] text-charcoal/60">Overview</p>
                   </div>
                 </div>
                 <span className="absolute top-6 right-8 font-cormorant text-6xl text-charcoal/[0.06] leading-none">&rdquo;</span>
                 <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                  If we clarify what &ldquo;Services&rdquo; are, expose key package info above the fold, and show real-time pricing, then first-time users will reach the booking step with fewer back-tracks, because current confusion, hidden details, and surprise costs cause drop-offs.
+                  If we clarify what &ldquo;Services&rdquo; are, expose key package info above the fold, and show real-time pricing, then first-time users will reach the booking step with fewer back-tracks, because <span className="font-bold text-[#FF385C]">current confusion, hidden details, and surprise costs cause drop-offs</span>.
                 </p>
               </div>
             </FadeUp>
@@ -730,7 +928,7 @@ export default function AirbnbConcept() {
                 Exploring directions
               </h2>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                Keeping the hypothesis in mind I moved to FigJam and started <span className="font-bold text-[#FF385C]">ideating over the main clustered pain points</span> I had discovered during my research and began carving out potential ideas from there.
+                Keeping the hypothesis in mind I moved to FigJam and started <span className="font-bold text-[#FF385C]">ideating over the main clustered pain points</span> I had discovered during my research.
               </p>
             </FadeUp>
             <FadeUp delay={0.1} className="mt-10">
@@ -754,7 +952,7 @@ export default function AirbnbConcept() {
 
             <FadeUp delay={0.2} className="mt-14">
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-6">
-                After taking into consideration all potential concepts to test, I ultimately focused on the <span className="font-bold text-[#FF385C]">&ldquo;Bundle it up&rdquo;</span> option.
+                After taking into consideration all potential concepts to test, I ultimately focused on the <span className="font-bold text-[#FF385C]">&ldquo;Bundle it up&rdquo;</span> option. It came out on top because it solves discoverability <span className="italic">at the moment of decision</span> - and grows existing booking revenue rather than competing with it.
               </p>
               <LightboxImage
                 src="/figjam.png"
@@ -764,7 +962,8 @@ export default function AirbnbConcept() {
             </FadeUp>
           </Section>
 
-          {/* ── 04 Low Fidelity ──────────────────────────── */}
+          {/* ── 04 Low Fidelity (hidden — restore by uncommenting) ──────── */}
+          {/*
           <Section id="lofi">
             <FadeUp>
               <SectionLabel number="04" label="Low Fidelity" />
@@ -777,16 +976,17 @@ export default function AirbnbConcept() {
             </FadeUp>
             <WireframeCarousel />
           </Section>
+          */}
 
           {/* ── 05 High Fidelity ─────────────────────────── */}
           <Section id="hifi">
             <FadeUp>
-              <SectionLabel number="05" label="High Fidelity" />
+              <SectionLabel number="04" label="High Fidelity" />
               <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
-                The redesign
+                Bundle it up
               </h2>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mb-10">
-                The final designs bring Services into the core Airbnb experience — connected, discoverable, and familiar.
+                This redesign ties Services back into the accommodation flow that already drives Airbnb. When a user books a stay, the top-rated services in that area surface inline - letting them add it and check out alongside their booking, rather than discovering Services in isolation.
               </p>
             </FadeUp>
             <HighFidelityCarousel />
@@ -803,7 +1003,7 @@ export default function AirbnbConcept() {
                   View deployed concept &#x2197;
                 </span>
               </a>
-              <p className="font-mono text-[11px] text-charcoal/30 mt-3">
+              <p className="font-mono text-[11px] text-charcoal/60 mt-3">
                 Prototype developed with Figma Make
               </p>
             </FadeUp>
@@ -812,16 +1012,35 @@ export default function AirbnbConcept() {
           {/* ── 06 Reflection ────────────────────────────── */}
           <Section id="reflection">
             <FadeUp>
-              <SectionLabel number="06" label="Reflection" />
+              <SectionLabel number="05" label="Reflection" />
               <h2 className="font-cormorant text-4xl md:text-5xl font-semibold text-charcoal mb-6">
                 Growth Opportunities
               </h2>
               <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
-                Carrying out this concept was not only fun on a personal level but extremely eye-opening. Going in, I aimed to relieve some of the blockers I felt as a user of the product — but during my research I discovered how the new feature wasn&apos;t just a bottleneck for other users, but how <span className="font-bold text-[#FF385C]">taking a different approach could widen the horizons for Airbnb from a business perspective</span>.
+                What began as a personal frustration revealed something bigger. Airbnb&apos;s Services feature wasn&apos;t just a usability problem - it was a missed business opportunity. Bundling services into the stay flow rather than isolating them in a tab points toward a model where <span className="font-bold text-[#FF385C]">discoverability and revenue grow together</span>.
               </p>
-              <p className="font-mono text-sm text-charcoal/60 leading-[1.9] mt-5">
-                Designing the wireframes revealed how critical it was to tie the services flow into the overall booking process — not only for the user, but for the business. By surfacing services alongside accommodations, the redesign showcased a model that could <span className="font-bold text-[#FF385C]">increase profit margins</span> by enabling users to add on services naturally as part of their journey, rather than discovering them in isolation.
-              </p>
+              <div className="relative mt-5 pr-12 md:pr-16">
+                <p className="font-mono text-sm text-charcoal/60 leading-[1.9]">
+                  <span className="font-bold text-[#FF385C]">What I&apos;d still love to do:</span> the biggest gap I&apos;d close is validation. The friction research grounded my design choices, but the Bundle it up redesign itself is still untested. A small round of usability tests on the prototype would tell me whether the bundled flow actually reduces hesitation at booking - or surfaces friction I didn&apos;t predict.
+                </p>
+                <svg
+                  className="absolute -top-1 right-0"
+                  width="28"
+                  height="40"
+                  viewBox="0 0 28 40"
+                  fill="none"
+                  style={{ transform: "rotate(8deg)", filter: "drop-shadow(0 2px 4px rgba(255, 56, 92, 0.18))" }}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 2 H24 A2 2 0 0 1 26 4 V36 L14 28 L2 36 V4 A2 2 0 0 1 4 2 Z"
+                    fill="#FF385C"
+                    stroke="#FF385C"
+                    strokeWidth="1"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
               
             </FadeUp>
           </Section>
@@ -831,7 +1050,7 @@ export default function AirbnbConcept() {
             <div className="border-t border-charcoal/[0.06] pt-10">
               <Link
                 href="/"
-                className="font-mono text-xs text-charcoal/40 hover:text-[#FF385C] tracking-widest uppercase transition-colors duration-300 inline-flex items-center gap-2 group"
+                className="font-mono text-xs text-charcoal/60 hover:text-[#FF385C] tracking-widest uppercase transition-colors duration-300 inline-flex items-center gap-2 group"
               >
                 <span className="group-hover:-translate-x-1 transition-transform duration-300">&larr;</span>
                 Back to Work

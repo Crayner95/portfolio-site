@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import FadeUp from "@/components/FadeUp";
-import Timeline from "@/components/Timeline";
 
 const skills = [
   "UX Research",
@@ -15,68 +15,145 @@ const skills = [
   "Wireframing",
 ];
 
+const thingsILove = [
+  "Crafting micro-interactions and the tiny details that delight",
+  "Exploring AI tools for design and research",
+  "Reading fantasy (currently obsessed with Sarah J. Maas)",
+  "Running (aiming to do a half marathon one day)",
+  "Drawing",
+];
+
 export default function About() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="border-b border-gold/10 bg-white pt-28 pb-14 px-6 md:px-10">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="font-mono text-[10px] text-gold tracking-widest uppercase block mb-4">
-              About
-            </span>
-            <h1 className="font-cormorant text-5xl md:text-7xl font-semibold text-charcoal leading-tight">
-              Celine Rayner
-            </h1>
-          </motion.div>
-        </div>
-      </div>
+      <div className="max-w-3xl mx-auto px-6 md:px-10 pt-32 pb-24">
+        {/* ── Section label ── */}
+        <FadeUp className="mb-12">
+          <span className="font-mono text-[10px] text-gold tracking-widest uppercase">
+            About
+          </span>
+        </FadeUp>
 
-      <div className="max-w-6xl mx-auto px-6 md:px-10 py-20">
-        {/* ── Part 1: Bio ───────────────────────────────────────── */}
-        <FadeUp className="mb-24">
-          <div className="max-w-3xl">
-            <p className="font-cormorant text-3xl md:text-4xl lg:text-5xl font-light leading-[1.3] text-charcoal">
-              Before joining the design world, I was a front-end developer, who liked bringing static designs to life, turning them into something everyone can enjoy. Now as a designer, I&apos;m on a mission to create designs that not only look good, but also feel good to use for all kinds of people. Let&apos;s make the digital world a better place :)
-            </p>
-            <div className="mt-6 ml-1">
-              <p className="font-cormorant text-2xl md:text-3xl font-light leading-[1.4] text-charcoal/60 italic">
-                She designs with intention — every detail carries a reason, and
-                every flow earns the user&apos;s trust.
+        {/* ── Quote ── */}
+        <FadeUp className="mb-16">
+          <div className="relative">
+            <span
+              aria-hidden="true"
+              className="absolute -top-8 md:-top-12 -left-2 md:-left-6 text-gold/70 select-none pointer-events-none"
+              style={{
+                fontFamily: "var(--font-lora)",
+                fontSize: "120px",
+                lineHeight: 1,
+              }}
+            >
+              &ldquo;
+            </span>
+            <blockquote
+              className="relative text-[22px] md:text-[28px] font-light italic text-charcoal/80 leading-[1.5]"
+              style={{ fontFamily: "var(--font-lora)" }}
+            >
+              Realizing you are fortunate enough to be in a position that allows you to create, and in some cases get paid to do what you love, might tip the balance in favor of the work.
+              <span
+                aria-hidden="true"
+                className="text-gold/70 inline-block align-middle ml-1"
+                style={{
+                  fontFamily: "var(--font-lora)",
+                  fontSize: "60px",
+                  lineHeight: 0,
+                  verticalAlign: "-0.35em",
+                }}
+              >
+                &rdquo;
+              </span>
+            </blockquote>
+          </div>
+          <p className="font-mono text-[11px] text-charcoal/40 tracking-widest uppercase mt-6">
+            — Rick Rubin
+          </p>
+        </FadeUp>
+
+        {/* ── Bio ── */}
+        <FadeUp className="mb-20">
+          <div className="flex flex-col md:flex-row items-start gap-10 md:gap-12">
+            <div className="space-y-6 font-cormorant text-[20px] font-light leading-[1.55] text-charcoal/70 flex-1">
+              <p>
+                Hi, I&rsquo;m Celine and this quote perfectly encapsulates how I feel about being a designer.
+              </p>
+              <p>
+                I think it&rsquo;s a privilege to design for a living, and my goal is to always make this belief evident through the quality of my work.
               </p>
             </div>
+            <motion.div
+              initial={{ opacity: 0, rotate: 0, y: 8 }}
+              whileInView={{ opacity: 1, rotate: 4, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ rotate: 0, scale: 1.02 }}
+              className="flex-shrink-0 w-[160px] md:w-[180px]"
+            >
+              <Image
+                src="/sketch.png"
+                alt="A sketch by Celine"
+                width={1086}
+                height={1448}
+                className="w-full h-auto"
+                priority
+              />
+            </motion.div>
           </div>
         </FadeUp>
 
-        <div className="border-t border-gold/15 pt-16 mb-24" />
-
-        {/* ── Part 2: Timeline ──────────────────────────────────── */}
-        <FadeUp className="mb-16">
-          <div className="flex items-center gap-6 mb-14">
-            <span className="font-mono text-[10px] text-charcoal/30 tracking-widest uppercase">
-              Experience
+        {/* ── Things I Love ── */}
+        <FadeUp className="mb-20">
+          <div className="flex items-center gap-6 mb-8">
+            <span className="font-mono text-[10px] text-charcoal/40 tracking-widest uppercase">
+              Things I Love
             </span>
-            <div className="h-px flex-1 bg-gold/15" />
+            <div className="h-px flex-1 bg-charcoal/10" />
           </div>
+          <ul className="space-y-4">
+            {thingsILove.map((item, i) => (
+              <motion.li
+                key={item}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.05,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="flex items-start gap-4 text-[17px] md:text-[18px] text-charcoal/80 leading-relaxed"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="text-gold mt-[6px] flex-shrink-0"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 2.8c.3 2.4.9 4.5 1.9 5.7 1 1.2 3 1.9 5.5 2.4-2.5.5-4.4 1.2-5.4 2.3-1 1.1-1.7 3.2-2 6.0-.4-2.7-1.1-4.7-2.1-5.8-1-1.1-3-1.9-5.5-2.5 2.5-.5 4.4-1.3 5.4-2.5C10.8 7.2 11.5 5.1 12 2.8Z"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <span>{item}</span>
+              </motion.li>
+            ))}
+          </ul>
         </FadeUp>
 
-        <div className="mb-24">
-          <Timeline />
-        </div>
-
-        <div className="border-t border-gold/15 pt-16 mb-20" />
-
-        {/* ── Part 3: Skills + Resume ───────────────────────────── */}
+        {/* ── Skills (kept as-is) ── */}
         <FadeUp>
-          <div className="flex items-center gap-6 mb-12">
-            <span className="font-mono text-[10px] text-charcoal/30 tracking-widest uppercase">
+          <div className="flex items-center gap-6 mb-8">
+            <span className="font-mono text-[10px] text-charcoal/40 tracking-widest uppercase">
               Skills
             </span>
-            <div className="h-px flex-1 bg-gold/15" />
+            <div className="h-px flex-1 bg-charcoal/10" />
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-14">
@@ -113,7 +190,6 @@ export default function About() {
               download
               className="group inline-flex items-center gap-4 border border-charcoal/20 hover:border-gold bg-transparent hover:bg-ivory px-8 py-5 transition-all duration-400 ease-out"
             >
-              {/* Icon */}
               <div className="w-7 h-8 border border-gold/40 group-hover:border-gold rounded-sm flex items-center justify-center relative transition-colors duration-300">
                 <svg
                   width="12"

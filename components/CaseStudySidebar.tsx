@@ -15,7 +15,6 @@ const defaultSections: SidebarSection[] = [
   { id: "decisions", label: "End State Iteration", number: "03" },
   { id: "solution", label: "Outcome & Impact", number: "04" },
   { id: "other-work", label: "Other Work", number: "05" },
-  { id: "reflection", label: "Reflection", number: "06" },
 ];
 
 export default function CaseStudySidebar({
